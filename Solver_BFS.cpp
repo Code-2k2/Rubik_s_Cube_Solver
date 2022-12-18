@@ -2,7 +2,6 @@
 // Created by Ayushi Saha on 14-12-2022.
 //
 
-
 #include<bits/stdc++.h>
 #include "Generic_Rubiks_Cube.h"
 
@@ -21,7 +20,8 @@ private:
     unordered_map<T, Generic_Rubiks_Cube::MOVE, H> move_done;
 
 //    bfs() -> performs breadth-first-search and returns a solved Rubik's Cube
-//    move_done[] -> Back-Pointer map as to how we reached that state
+//    move_done[] -> Back-Pointer map as to how we reached that state (Required to generate the sequence of moves)
+
     T bfs() {
         queue<T> q;
         q.push(rc);
@@ -50,7 +50,7 @@ private:
 public:
     T rc;
 
-    explicit Solver_BFS(T _rubiksCube) {
+    Solver_BFS(T _rubiksCube) {
         rc = _rubiksCube;
     }
 

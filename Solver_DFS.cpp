@@ -18,7 +18,9 @@ private:
     vector<Generic_Rubiks_Cube::MOVE> moves;
     int max_search_depth;
 
-    //DFS code to find the solution (helper function)
+    //max_search_depth-> takes the maximum depth to which DFS is permitted
+    //dfs()-> performs depth-first-search and returns a solved Rubik's Cube if it finds it within the specified maximum depth
+
     bool dfs(int depth) {
         if (rc.isSolved()) return true;
         if (depth > max_search_depth) return false;

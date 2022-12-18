@@ -229,6 +229,7 @@ public:
         return *this;
     }
 
+    //Operator overloading
     bool operator==(const Rubiks_Cube_1D_Representation &r1) const {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 3; j++) {
@@ -251,6 +252,7 @@ public:
         return *this;
     }
 
+    //Hashing each cube configuration in the form of a string
     struct Hash1D {
         size_t operator()(const Rubiks_Cube_1D_Representation &r1) const {
             string str;

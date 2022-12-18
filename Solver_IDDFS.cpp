@@ -19,6 +19,10 @@ private:
     vector<Generic_Rubiks_Cube::MOVE> moves;
     int threshold_depth;
 
+    //threshold_depth-> takes the maximum depth to which IDDFS is permitted
+    //iddfs()-> performs iterative deepening depth-first-search
+    // and returns a solved Rubik's Cube if it finds it within the specified maximum depth
+
     bool iddfs()
     {
         int len=1;
@@ -31,7 +35,6 @@ private:
         return false;
     }
 
-//    DFS code to find the solution at specified depth (helper function)
     bool dfs(int depth,int max_search_depth ) {
         if (rc.isSolved()) return true;
 

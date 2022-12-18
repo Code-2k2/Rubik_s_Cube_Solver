@@ -3,20 +3,20 @@
 //
 
 
-#include<bits/stdc++.h>
+#include "bits/stdc++.h"
 #include "Generic_Rubiks_Cube.h"
-//#include "../Model/PatternDatabase/PatternDatabase.h"
-//#include "../PatternDatabases/CornerPatternDatabase.h"
+#include "PatternDatabase.h"
+#include "CornerPatternDatabase.h"
 
 #ifndef RUBIKS_CUBE_SOLVER_IDASTAR_SOLVER_H
 #define RUBIKS_CUBE_SOLVER_IDASTAR_SOLVER_H
 
 template<typename T, typename H>
-class IDAstarSolver {
+class Solver_IDAstar {
 private:
     CornerPatternDatabase cornerDB;
-    vector<RubiksCube::MOVE> moves;
-    unordered_map<T, RubiksCube::MOVE, H> move_done;
+    vector<Generic_Rubiks_Cube::MOVE> moves;
+    unordered_map<T, Generic_Rubiks_Cube::MOVE, H> move_done;
     unordered_map<T, bool, H> visited;
 
     struct Node {
@@ -47,7 +47,7 @@ private:
     pair<T, int> IDAstar(int bound) {
 //        priority_queue contains pair(Node, move done to reach that)
         priority_queue<pair<Node, int>, vector<pair<Node, int>>, compareCube> pq;
-        Node start = Node(rubiksCube, 0, cornerDB.getNumMoves(rubiksCube));
+        Node start = Node(rc, 0, cornerDB.getNumMoves(rc));
         pq.push(make_pair(start, 0));
         int next_bound = 100;
         while (!pq.empty()) {
@@ -58,12 +58,12 @@ private:
             if (visited[node.cube]) continue;
 
             visited[node.cube] = true;
-            move_done[node.cube] = RubiksCube::MOVE(p.second);
+            move_done[node.cube] = Generic_Rubiks_Cube::MOVE(p.second);
 
             if (node.cube.isSolved()) return make_pair(node.cube, bound);
             node.depth++;
             for (int i = 0; i < 18; i++) {
-                auto curr_move = RubiksCube::MOVE(i);
+                auto curr_move = Generic_Rubiks_Cube::MOVE(i);
                 node.cube.move(curr_move);
                 if (!visited[node.cube]) {
                     node.estimate = cornerDB.getNumMoves(node.cube);
@@ -77,18 +77,18 @@ private:
             }
 
         }
-        return make_pair(rubiksCube, next_bound);
+        return make_pair(rc, next_bound);
     }
 
 public:
-    T rubiksCube;
+    T rc;
 
-    IDAstarSolver(T _rubiksCube, string fileName) {
-        rubiksCube = _rubiksCube;
+    Solver_IDAstar(T _rubiksCube, string fileName) {
+        rc = _rubiksCube;
         cornerDB.fromFile(fileName);
     }
 
-    vector<RubiksCube::MOVE> solve() {
+    vector<Generic_Rubiks_Cube::MOVE> solve() {
         int bound = 1;
         auto p = IDAstar(bound);
         while (p.second != bound) {
@@ -99,15 +99,15 @@ public:
         T solved_cube = p.first;
         assert(solved_cube.isSolved());
         T curr_cube = solved_cube;
-        while (!(curr_cube == rubiksCube)) {
-            RubiksCube::MOVE curr_move = move_done[curr_cube];
+        while (!(curr_cube == rc)) {
+            Generic_Rubiks_Cube::MOVE curr_move = move_done[curr_cube];
             moves.push_back(curr_move);
             curr_cube.invert(curr_move);
         }
-        rubiksCube = solved_cube;
+        rc = solved_cube;
         reverse(moves.begin(), moves.end());
         return moves;
     }
 };
 
-#endif //RUBIKS_CUBE_SOLVER_IDASTARSOLVER_H
+#endif //RUBIKS_CUBE_SOLVER_IDASTAR_SOLVER_H
